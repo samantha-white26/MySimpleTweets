@@ -1,20 +1,27 @@
 package com.codepath.apps.restclienttemplate;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.codepath.apps.restclienttemplate.models.Tweet;
+import com.codepath.apps.restclienttemplate.models.User;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
+import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcels;
 
 import cz.msebera.android.httpclient.Header;
 
 public class ComposeActivity extends AppCompatActivity {
 
     private TwitterClient client;
+    Tweet tweet;
+    User user;
 
 
 
@@ -40,12 +47,31 @@ public class ComposeActivity extends AppCompatActivity {
           @Override
           public void onSuccess (int statusCode, Header[] headers, JSONObject response) {
               super.onSuccess(statusCode, headers, response);
+
+              try {
+                  tweet = Tweet.fromJSON(response);
+
+
+                  // Prepare data intent
+                  Intent data = new Intent();
+                  // Pass relevant data back as a result
+                  //Intent.putExtra("youtube_key", Parcels.wrap(youtube_key));
+
+                  data.putExtra("newTweet", Parcels.wrap(tweet));
+
+                  // Activity finished ok, return the data
+                  setResult(RESULT_OK, data); // set result code and bundle data for// response
+                  finish(); // closes the activity, pass data to parent
+
+
+              } catch (JSONException e) {
+                  e.printStackTrace();
+              }
+
+
               Toast.makeText(ComposeActivity.this, "successful sending tweet", Toast.LENGTH_LONG).show();
 
-            //                // Prepare data intent
-            //                Intent data = new Intent();
-            //                // Pass relevant data back as a result
-            //                data.putExtra("name", etCompose.getText().toString());
+
             //                data.putExtra("code", 200); // ints work too
             //                // Activity finished ok, return the data
             //                setResult(RESULT_OK, data); // set result code and bundle data for
