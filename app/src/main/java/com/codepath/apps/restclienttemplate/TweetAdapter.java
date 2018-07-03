@@ -9,12 +9,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-
-import com.codepath.apps.restclienttemplate.models.Tweet;
-
-import java.util.List;
-
-
 import com.codepath.apps.restclienttemplate.models.Tweet;
 
 import java.util.List;
