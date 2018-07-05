@@ -1,6 +1,7 @@
 package com.codepath.apps.restclienttemplate;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
 import android.util.Log;
@@ -12,6 +13,8 @@ import android.widget.TextView;
 
 import com.codepath.apps.restclienttemplate.models.Tweet;
 
+import org.parceler.Parcels;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -19,7 +22,7 @@ import java.util.Locale;
 
 public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> {
 
-    private List<Tweet> mTweets;
+    public List<Tweet> mTweets;
     Context context;
 
     //pass in the tweets array into the construction
@@ -91,7 +94,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
     }
 
     // getRelativeTimeAgo("Mon Apr 01 21:16:23 +0000 2014");
-    public String getRelativeTimeAgo(String rawJsonDate) {
+    public static String getRelativeTimeAgo(String rawJsonDate) {
         String twitterFormat = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";
         SimpleDateFormat sf = new SimpleDateFormat(twitterFormat, Locale.ENGLISH);
         sf.setLenient(true);
@@ -109,7 +112,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
     }
 //create viewholder class
 
-    public static class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         //the views I want to display
         public ImageView ivProfileImage;
         public TextView tvUsername;
@@ -125,8 +128,28 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
 
             ivProfileImage = (ImageView) itemView.findViewById(R.id.ivProfileImage);
             tvUsername = (TextView) itemView.findViewById(R.id.tvUserName);
-            tvBody = (TextView) itemView.findViewById(R.id.tvBody);
+            tvBody = (TextView) itemView.findViewById(R.id.tvDBody);
             tvCreatedAt = (TextView) itemView.findViewById(R.id.tvCreatedAt);
+
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+
+            int position = getAdapterPosition();
+
+            if (position != RecyclerView.NO_POSITION){
+                //get the movie at that position
+                Tweet tweet = mTweets.get(position);
+                //create an intent for an activity
+                Intent intent = new Intent(context, TweetDetailsActivity.class);
+                //set up so the information we want to pass will be passed to the new activtiy
+                intent.putExtra("tweetDetails", Parcels.wrap(tweet));
+                context.startActivity(intent);
+
+        }
+
 
 
         }

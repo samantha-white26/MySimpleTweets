@@ -34,6 +34,7 @@ public class TimelineActivity extends AppCompatActivity {
     RecyclerView rvTweets;
     private final int REQUEST_CODE = 20;
     private SwipeRefreshLayout swipeContainer;
+    MenuItem miActionProgressItem;
 
 
 
@@ -59,6 +60,10 @@ public class TimelineActivity extends AppCompatActivity {
         rvTweets.setAdapter(tweetAdapter);
 
         populateTimeline();
+
+
+
+
 
 
 
@@ -104,8 +109,37 @@ public class TimelineActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+
         return true;
     }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        // Store instance of the menu item containing progress
+        // Extract the action-view from the menu item
+        miActionProgressItem = menu.findItem(R.id.miActionProgress);
+        // Return to finish
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+
+    public void showProgressBar() {
+        // Show progress item
+        if(miActionProgressItem != null){
+
+            miActionProgressItem.setVisible(true);
+        }
+
+    }
+
+    public void hideProgressBar() {
+        // Hide progress item
+        if (miActionProgressItem != null){
+            miActionProgressItem.setVisible(false);
+        }
+
+    }
+
 
     public void onComposeAction(MenuItem mi) {
         // handle click here
@@ -139,17 +173,20 @@ public class TimelineActivity extends AppCompatActivity {
     private void populateTimeline() {
     // make network request to get info from twitter api and make an anonymous class to deal with
     // response
+        showProgressBar();
     client.getHomeTimeline(
         new JsonHttpResponseHandler() {
 
           @Override
           public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
             Log.d("TwitterClient", response.toString());
+            hideProgressBar();
           }
 
           @Override
           public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
             //   Log.d("TwitterClient", response.toString());
+              hideProgressBar();
 
             // iterate through the JSON array
             // for each entry deserialize the JSON object
@@ -174,6 +211,7 @@ public class TimelineActivity extends AppCompatActivity {
           public void onFailure(
               int statusCode, Header[] headers, String responseString, Throwable throwable) {
             Log.d("TwitterClient", responseString);
+            hideProgressBar();
             throwable.printStackTrace();
           }
 
@@ -181,6 +219,7 @@ public class TimelineActivity extends AppCompatActivity {
           public void onFailure(
               int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
             Log.d("TwitterClient", errorResponse.toString());
+            hideProgressBar();
             throwable.printStackTrace();
           }
 
@@ -188,6 +227,7 @@ public class TimelineActivity extends AppCompatActivity {
           public void onFailure(
               int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
             Log.d("TwitterClient", errorResponse.toString());
+            hideProgressBar();
             throwable.printStackTrace();
           }
         });
