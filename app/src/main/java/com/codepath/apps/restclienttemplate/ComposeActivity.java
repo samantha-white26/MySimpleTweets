@@ -65,7 +65,7 @@ public class ComposeActivity extends AppCompatActivity {
 
         client = TwitterApplication.getRestClient(this);
 
-    client.sendTweet(message, new JsonHttpResponseHandler() {
+        client.sendTweet(message, new JsonHttpResponseHandler() {
           @Override
           public void onSuccess (int statusCode, Header[] headers, JSONObject response) {
               super.onSuccess(statusCode, headers, response);
@@ -77,10 +77,7 @@ public class ComposeActivity extends AppCompatActivity {
                   // Prepare data intent
                   Intent data = new Intent();
                   // Pass relevant data back as a result
-                  //Intent.putExtra("youtube_key", Parcels.wrap(youtube_key));
-
                   data.putExtra("newTweet", Parcels.wrap(tweet));
-
                   // Activity finished ok, return the data
                   setResult(RESULT_OK, data); // set result code and bundle data for// response
                   finish(); // closes the activity, pass data to parent
@@ -94,11 +91,6 @@ public class ComposeActivity extends AppCompatActivity {
               Toast.makeText(ComposeActivity.this, "successful sending tweet", Toast.LENGTH_LONG).show();
 
 
-            //                data.putExtra("code", 200); // ints work too
-            //                // Activity finished ok, return the data
-            //                setResult(RESULT_OK, data); // set result code and bundle data for
-            // response
-            //                finish(); // closes the activity, pass data to parent
 
           }
 
