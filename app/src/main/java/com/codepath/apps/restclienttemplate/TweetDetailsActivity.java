@@ -7,6 +7,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.codepath.apps.restclienttemplate.models.Tweet;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
@@ -46,7 +48,7 @@ public class TweetDetailsActivity extends AppCompatActivity {
 
         GlideApp.with(this)
                 .load(tweet.user.profileImgUrl)
-                //.transform(new RoundedCornersTransformation(25, 10))
+                .transforms(new CenterCrop(), new RoundedCorners(15))
                 .into(ivProfileImg);
 
 
@@ -66,7 +68,7 @@ public class TweetDetailsActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
-                Toast.makeText(TweetDetailsActivity.this, "successful sending tweet", Toast.LENGTH_LONG).show();
+                Toast.makeText(TweetDetailsActivity.this, "ReTweeted", Toast.LENGTH_LONG).show();
 
 
 

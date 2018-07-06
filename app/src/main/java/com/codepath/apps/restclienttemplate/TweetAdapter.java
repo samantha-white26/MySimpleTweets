@@ -12,6 +12,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.codepath.apps.restclienttemplate.models.Tweet;
 
 import org.parceler.Parcels;
@@ -75,7 +77,10 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
         holder.tvCreatedAt.setText(getRelativeTimeAgo(tweet.createAt));
 
         //glide to put in the image
-        GlideApp.with(context).load(tweet.user.profileImgUrl).into(holder.ivProfileImage);
+        GlideApp.with(context)
+                .load(tweet.user.profileImgUrl)
+                .transforms(new CenterCrop(), new RoundedCorners(15))
+                .into(holder.ivProfileImage);
 
     }
 
