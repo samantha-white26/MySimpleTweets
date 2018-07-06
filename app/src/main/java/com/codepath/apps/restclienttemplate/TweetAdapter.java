@@ -8,8 +8,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.codepath.apps.restclienttemplate.models.Tweet;
 
@@ -24,6 +26,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
 
     public List<Tweet> mTweets;
     Context context;
+
 
     //pass in the tweets array into the construction
     //declare our constructor
@@ -110,48 +113,58 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
 
         return relativeDate;
     }
-//create viewholder class
+  // create viewholder class
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        //the views I want to display
-        public ImageView ivProfileImage;
-        public TextView tvUsername;
-        public TextView tvBody;
-        public TextView tvCreatedAt;
+  public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    // the views I want to display
+    public ImageView ivProfileImage;
+    public TextView tvUsername;
+    public TextView tvBody;
+    public TextView tvCreatedAt;
+    public Button reply;
 
+    // constructor takes in inflated layout ... What is an inflated layout??
+    public ViewHolder(View itemView) {
+      super(itemView);
 
-        //constructor takes in inflated layout ... What is an inflated layout??
-        public ViewHolder (View itemView){
-            super(itemView);
+      // perform findbiewby id lookups
 
-            //perform findbiewby id lookups
+      ivProfileImage = (ImageView) itemView.findViewById(R.id.ivProfileImage);
+      tvUsername = (TextView) itemView.findViewById(R.id.tvUserName);
+      tvBody = (TextView) itemView.findViewById(R.id.tvDBody);
+      tvCreatedAt = (TextView) itemView.findViewById(R.id.tvCreatedAt);
+      reply = (Button) itemView.findViewById(R.id.reply);
+      reply.setOnClickListener(this);
 
-            ivProfileImage = (ImageView) itemView.findViewById(R.id.ivProfileImage);
-            tvUsername = (TextView) itemView.findViewById(R.id.tvUserName);
-            tvBody = (TextView) itemView.findViewById(R.id.tvDBody);
-            tvCreatedAt = (TextView) itemView.findViewById(R.id.tvCreatedAt);
+      itemView.setOnClickListener(this);
+    }
 
-            itemView.setOnClickListener(this);
-        }
+    @Override
+    public void onClick(View v) {
 
-        @Override
-        public void onClick(View v) {
+        int position = getAdapterPosition();
 
-            int position = getAdapterPosition();
+        if (position != RecyclerView.NO_POSITION) {
+            //If reply button has been clicked
+            if (v.getId() == R.id.reply) {
+                Toast.makeText(context, "clicked the reply button", Toast.LENGTH_LONG).show();
 
-            if (position != RecyclerView.NO_POSITION){
-                //get the movie at that position
+            }
+            //anywhere else is clicked in itemview
+            else {
+                Toast.makeText(context, "not clicked the reply button", Toast.LENGTH_LONG).show();
+                // get the movie at that position
                 Tweet tweet = mTweets.get(position);
-                //create an intent for an activity
+                // create an intent for an activity
                 Intent intent = new Intent(context, TweetDetailsActivity.class);
-                //set up so the information we want to pass will be passed to the new activtiy
+                // set up so the information we want to pass will be passed to the new activtiy
                 intent.putExtra("tweetDetails", Parcels.wrap(tweet));
                 context.startActivity(intent);
-
+            }
         }
 
 
-
-        }
     }
+    }
+
 }
