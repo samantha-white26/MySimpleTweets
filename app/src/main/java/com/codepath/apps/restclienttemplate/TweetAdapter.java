@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.codepath.apps.restclienttemplate.models.Tweet;
 
@@ -143,18 +142,19 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
     public void onClick(View v) {
 
         int position = getAdapterPosition();
+        Tweet tweet = mTweets.get(position);
 
         if (position != RecyclerView.NO_POSITION) {
             //If reply button has been clicked
             if (v.getId() == R.id.reply) {
-                Toast.makeText(context, "clicked the reply button", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(context, ComposeActivity.class);
+                intent.putExtra("isReply", true);
+                intent.putExtra("username", tweet.user.screenName);
+                context.startActivity(intent);
 
             }
             //anywhere else is clicked in itemview
             else {
-                Toast.makeText(context, "not clicked the reply button", Toast.LENGTH_LONG).show();
-                // get the movie at that position
-                Tweet tweet = mTweets.get(position);
                 // create an intent for an activity
                 Intent intent = new Intent(context, TweetDetailsActivity.class);
                 // set up so the information we want to pass will be passed to the new activtiy
@@ -165,6 +165,8 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
 
 
     }
+
+
     }
 
 }
