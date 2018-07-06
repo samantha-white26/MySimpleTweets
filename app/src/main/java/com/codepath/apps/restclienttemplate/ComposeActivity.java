@@ -29,6 +29,7 @@ public class ComposeActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
       setContentView(R.layout.activity_compose);
 
+
     isReply = getIntent().getBooleanExtra("isReply", false);
     username = getIntent().getStringExtra("username");
 
