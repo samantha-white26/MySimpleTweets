@@ -23,6 +23,12 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
 
+
+/*
+    Adapter is responsible for connecting the recycler view xml to the database of tweets called from
+    populate timeline.
+    The link between xml/ui and data.
+ */
 public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> {
 
     public List<Tweet> mTweets;
@@ -101,6 +107,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
     }
 
     // getRelativeTimeAgo("Mon Apr 01 21:16:23 +0000 2014");
+    //takes in JSON date and converts to mins ago
     public static String getRelativeTimeAgo(String rawJsonDate) {
         String twitterFormat = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";
         SimpleDateFormat sf = new SimpleDateFormat(twitterFormat, Locale.ENGLISH);
@@ -117,8 +124,8 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
 
         return relativeDate;
     }
-  // create viewholder class
 
+    // create viewholder class
   public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
     // the views I want to display
     public ImageView ivProfileImage;
@@ -127,7 +134,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
     public TextView tvCreatedAt;
     public Button reply;
 
-    // constructor takes in inflated layout ... What is an inflated layout??
+    // constructor takes in inflated layout
     public ViewHolder(View itemView) {
       super(itemView);
 
@@ -152,6 +159,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
         if (position != RecyclerView.NO_POSITION) {
             //If reply button has been clicked
             if (v.getId() == R.id.reply) {
+                //go to composeActivity with info of the user you are replying to
                 Intent intent = new Intent(context, ComposeActivity.class);
                 intent.putExtra("isReply", true);
                 intent.putExtra("username", tweet.user.screenName);

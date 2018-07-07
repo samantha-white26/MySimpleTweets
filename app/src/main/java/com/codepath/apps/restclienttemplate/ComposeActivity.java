@@ -15,6 +15,15 @@ import org.json.JSONObject;
 import org.parceler.Parcels;
 
 import cz.msebera.android.httpclient.Header;
+/*
+
+    This activity is the activity that allows you to compose a new tweet.
+    Text from the edit text field is then passed to twitter client to post
+    to your twitterfeed
+    This activity is also used to reply to a tweet. If the reply icon is clicked
+    on the individual tweet in recycler view this activity is shown with the edit text set to the
+    specific user that the tweet is replying or commenting on
+ */
 
 public class ComposeActivity extends AppCompatActivity {
 
@@ -29,29 +38,23 @@ public class ComposeActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
       setContentView(R.layout.activity_compose);
 
-
-    isReply = getIntent().getBooleanExtra("isReply", false);
-    username = getIntent().getStringExtra("username");
-
+      isReply = getIntent().getBooleanExtra("isReply", false);
+      username = getIntent().getStringExtra("username");
 
     if (isReply) {
-      // reply
+      // make the text field have the the @username before the text of the reply tweet
       etCompose = (EditText) findViewById(R.id.etCompose);
       etCompose.setText("@"+username);
 
-    } else {
-        // compose
     }
   }
 
   public void onSubmit(View v) {
-//    if (isReply) {
-//      // insert blah blah blah
-//      Toast.makeText(this, "clicked something", Toast.LENGTH_LONG).show();
-//    } else {
       EditText etCompose = (EditText) findViewById(R.id.etCompose);
+      //convert text by the user into a string and pass to ...
       String message = etCompose.getText().toString();
-
+      //sendTweet client call which posts the tweet to twitter API
+      //create client class
       client = TwitterApplication.getRestClient(this);
 
       client.sendTweet(
@@ -75,9 +78,6 @@ public class ComposeActivity extends AppCompatActivity {
               } catch (JSONException e) {
                 e.printStackTrace();
               }
-
-              Toast.makeText(ComposeActivity.this, "successful sending tweet", Toast.LENGTH_LONG)
-                  .show();
             }
 
             @Override

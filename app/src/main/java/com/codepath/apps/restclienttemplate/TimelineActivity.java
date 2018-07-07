@@ -22,13 +22,19 @@ import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
 
+/*
+    This activity is the main activity for this application
+    it displays tweets retrieved from the twitter client in a recycler view
+    format. It is a replication of a twitter timeline where your own tweets
+    and tweets from the people you follow are
+
+ */
 public class TimelineActivity extends AppCompatActivity {
 
     //reference to twitter client
     private TwitterClient client;
 
-    //we're going to connect the adapter here
-
+    //Connect the TweetAdapter
     TweetAdapter tweetAdapter;
     ArrayList<Tweet> tweets;
     RecyclerView rvTweets;
@@ -50,7 +56,7 @@ public class TimelineActivity extends AppCompatActivity {
         rvTweets = (RecyclerView) findViewById(R.id.rvTweet);
         //instantiate the arraylist (data source)
         tweets = new ArrayList<>();
-        //construct the adapter from this datasource (what does this mean)
+        //construct the adapter for this datasource
         tweetAdapter = new TweetAdapter(tweets);
 
         //RecyclerView Setup(Layout manager, set the recycler view to use the
@@ -58,30 +64,23 @@ public class TimelineActivity extends AppCompatActivity {
         rvTweets.setLayoutManager(new LinearLayoutManager(this));
         //set the adapter
         rvTweets.setAdapter(tweetAdapter);
-
+        //get tweets to populate the timeline
         populateTimeline();
 
 
-
-
-
-
-
-
+        //find the swipe container...allows the creation of a refresh action
         swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
         // Setup refresh listener which triggers new data loading
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                // Your code to refresh the list here.
-                // Make sure you call swipeContainer.setRefreshing(false)
-                // once the network request has completed successfully.
+                // Refresh the timeline by making another twitter client call
                 fetchTimelineAsync(0);
             }
         });
         // Configure the refreshing colors
-        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
-                android.R.color.holo_green_light,
+        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_dark,
+                android.R.color.holo_green_dark,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
     }
@@ -93,8 +92,9 @@ public class TimelineActivity extends AppCompatActivity {
         // `client` here is an instance of Android Async HTTP
         // getHomeTimeline is an example endpoint.
 
-                // Remember to CLEAR OUT old items before appending in the new ones
+                // CLEAR OUT old twweets before appending in the new ones
                 tweets.clear();
+                //get the tweets obtained in the populatetimeline
                 populateTimeline();
                 // ...the data has come back, add new items to your adapter...
                 tweetAdapter.addAll(tweets);
@@ -109,7 +109,6 @@ public class TimelineActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
-
         return true;
     }
 
@@ -125,8 +124,10 @@ public class TimelineActivity extends AppCompatActivity {
 
     public void showProgressBar() {
         // Show progress item
+        //make sure that the Progress item is set to null
+        //had an issue where it was instantiated as null
+        //unclear as to why this was an issue
         if(miActionProgressItem != null){
-
             miActionProgressItem.setVisible(true);
         }
 
@@ -134,6 +135,7 @@ public class TimelineActivity extends AppCompatActivity {
 
     public void hideProgressBar() {
         // Hide progress item
+        //same issue as before, must check for null
         if (miActionProgressItem != null){
             miActionProgressItem.setVisible(false);
         }
@@ -143,8 +145,9 @@ public class TimelineActivity extends AppCompatActivity {
 
     public void onComposeAction(MenuItem mi) {
         // handle click here
-        //Toast.makeText(this, "successfully clicked", Toast.LENGTH_LONG).show();
+        //launch a new activity the compose activity
         Intent intent = new Intent(TimelineActivity.this, ComposeActivity.class);
+        //start activity so it will return to timeline activity once action in compose activity is complete
         startActivityForResult(intent, REQUEST_CODE);
 
     }
@@ -155,18 +158,12 @@ public class TimelineActivity extends AppCompatActivity {
         // REQUEST_CODE is defined above
         if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
             // Extract name value from result extras
-
             Tweet newTweet = (Tweet) Parcels.unwrap(data.getParcelableExtra("newTweet"));
+            //add new tweet to timeline
             tweets.add(0, newTweet);
             tweetAdapter.notifyItemInserted(0);
             rvTweets.scrollToPosition(0);
 
-
-            //Tweet tweet = intent.getExtras
-
-            //String name = .getExtras().getString("name");
-            //int code = data.getExtras().getInt("code", 0);
-            // Toast the name to display temporarily on screen
 
         }
     }
