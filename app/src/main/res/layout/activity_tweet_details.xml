@@ -59,11 +59,22 @@
 
     <Button
         android:id="@+id/rtbutton"
-        android:layout_width="62dp"
-        android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/tvDTimestamp"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="38dp"
+        android:layout_width="42dp"
+        android:layout_height="35dp"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="46dp"
         android:background="@drawable/ic_vector_retweet"
         android:onClick="onRetweet" />
+
+    <Button
+        android:id="@+id/favorite"
+        android:layout_width="44dp"
+        android:layout_height="36dp"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="114dp"
+        android:onClick="onFavorite"
+        android:background="@drawable/ic_vector_heart_stroke" />
+
 </RelativeLayout>

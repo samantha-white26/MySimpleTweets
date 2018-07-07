@@ -3,6 +3,7 @@ package com.codepath.apps.restclienttemplate;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,6 +28,8 @@ public class TweetDetailsActivity extends AppCompatActivity {
     @BindView(R.id.tvDBody) TextView tvDBody;
     @BindView(R.id.ivProfileImg) ImageView ivProfileImg;
     @BindView(R.id.tvDTimestamp) TextView tvDTimestamp;
+    @BindView(R.id.favorite) Button favorite;
+
 
     Tweet tweet;
     private TwitterClient client;
@@ -53,6 +56,36 @@ public class TweetDetailsActivity extends AppCompatActivity {
 
 
     }
+
+    public void onFavorite(View v){
+        client = TwitterApplication.getRestClient(this);
+
+
+        client.favorite(tweet.uid, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess (int statusCode, Header[] headers, JSONObject response) {
+                super.onSuccess(statusCode, headers, response);
+                try{
+                    tweet = Tweet.fromJSON(response);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                favorite.setBackgroundResource(R.drawable.ic_vector_heart);
+                //Toast.makeText(TweetDetailsActivity.this, "success connecting to favoriting tweet", Toast.LENGTH_LONG).show();
+
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+                Toast.makeText(TweetDetailsActivity.this, "failure connecting to favoriting tweet", Toast.LENGTH_LONG).show();
+
+            }
+        });
+    }
+
+
+
 
     public void onRetweet(View v) {
         client = TwitterApplication.getRestClient(this);
