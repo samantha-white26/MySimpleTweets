@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,7 +36,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
 
     //pass in the tweets array into the construction
     //declare our constructor
-    //This is confusing to me
+
     public TweetAdapter(List<Tweet> tweets){
         mTweets = tweets;
     }
@@ -74,10 +73,8 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
     public void onBindViewHolder(ViewHolder holder, int position) {
         //which tweet object to show based on position
         Tweet tweet = mTweets.get(position);
-        Log.i("awesometest", "position:" + position);
 
         //populate the views according to the data above
-        //right now just textview
         holder.tvUsername.setText("@"+tweet.user.name);
         holder.tvBody.setText(tweet.body);
         holder.tvCreatedAt.setText(getRelativeTimeAgo(tweet.createAt));
